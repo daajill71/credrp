@@ -1,1 +1,4 @@
 .env
+
+# Ignore a specific JavaScript file in a directory
+origser.js
