@@ -1,5 +1,6 @@
 import React from 'react';
-import DisputeForm from './components/DisputeForm';
+//import DisputeForm from './components/DisputeForm';
+import DisputeList from './components/DisputeList';
 
 function App() {
   return (
@@ -8,7 +9,7 @@ function App() {
         <h1>Credit Repair Software</h1>
       </header>
       <main>
-        <DisputeForm />
+        <DisputeList/>        
         {/* Add other components and features here */}
       </main>
     </div>
@@ -16,3 +17,4 @@ function App() {
 }
 
 export default App;
+//DisputeForm
