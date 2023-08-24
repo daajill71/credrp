@@ -2,12 +2,14 @@ import React from 'react';
 //import ReactDOM from 'react-dom';
 import { createRoot } from 'react-dom/client'; // Import createRoot from react-dom/client
 import App from './App';
+//import MainLayout from './MainLayout'; // Import your MainLayout component
 import './index.css';
 
 const root = document.getElementById('root');
 const rootContainer = createRoot(root); // Use createRoot from react-dom/client
 rootContainer.render(
   <React.StrictMode>
-    <App />
+    <App />   
   </React.StrictMode>
 );
+

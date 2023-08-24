@@ -25,3 +25,6 @@ yarn-error.log*
 # Ignore a specific JavaScript file in a directory
 
 origindex.js
+extraMainlayout.js
+origApp.js
+
