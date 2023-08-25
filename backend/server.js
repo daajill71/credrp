@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const cors = require('cors');
+const disputelistRoute = require('./routes/disputelist');
 
 // Import the connectDB function
 const connectDB = require('./connectdb');
@@ -28,8 +29,13 @@ app.use(bodyParser.json());
 app.use(cors(corsOptions));
 
 // Routes
-const disputeRoutes = require('./routes/disputeRoutes');
-app.use('/api/disputes', disputeRoutes);
+//const disputeRoutes = require('./routes/disputeRoutes');
+//app.use('/api/disputes', disputeRoutes);
+
+// Import disputelist Routes
+
+app.use('/api/disputes', disputelistRoute);
+
 
 // Start the server
 app.listen(PORT, () => {
