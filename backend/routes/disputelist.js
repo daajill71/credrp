@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const Dispute = require('../models/dispute'); // Import your MongoDB model for disputes
+const Dispute = require('../models/Dispute'); // Import your MongoDB model for disputes
 
 // Define a route to get a list of disputes
 router.get('/', async (req, res) => {
