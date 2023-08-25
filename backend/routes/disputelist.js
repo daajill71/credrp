@@ -3,8 +3,6 @@ const express = require('express');
 const router = express.Router();
 const Dispute = require('../models/Dispute'); // Import your MongoDB model for disputes
 
-
-
 // Route to fetch data
 router.get('/api/disputes', async (req, res) => {
   try {
@@ -12,7 +10,7 @@ router.get('/api/disputes', async (req, res) => {
     console.log('Fetching data from MongoDB');
 
     // Fetch data from MongoDB using the Dispute model
-    const data = await Dispute.find();
+    const disputes = await Dispute.find();
 
     // Log after data retrieval
     console.log('Data retrieved successfully');
