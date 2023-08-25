@@ -9,7 +9,7 @@ function DisputeList() {
 
   useEffect(() => {
     // Fetch data from the backend API endpoint
-    axios.get(`${API_BASE_URL}/disputes`) // Use the base URL and specific endpoint
+    axios.get(`${API_BASE_URL}/api/disputes`) // Use the base URL and specific endpoint
       .then((response) => {
         setDisputes(response.data);
         console.log('Data fetched successfully:', response.data); // Log successful response
