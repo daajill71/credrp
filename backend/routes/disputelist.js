@@ -1,5 +1,4 @@
 // backend/routes/disputelist.js
-
 const express = require('express');
 const router = express.Router();
 const Dispute = require('../models/Dispute'); // Import your MongoDB model for disputes
@@ -7,25 +6,25 @@ const Dispute = require('../models/Dispute'); // Import your MongoDB model for d
 
 
 // Route to fetch data
-router.get('/fetch-data', async (req, res) => {
+router.get('/api/disputes', async (req, res) => {
   try {
     // Log before retrieving data
     console.log('Fetching data from MongoDB');
 
-    // Fetch data from MongoDB using the model
-    const data = await YourModel.find();
+    // Fetch data from MongoDB using the Dispute model
+    const data = await Dispute.find();
 
     // Log after data retrieval
     console.log('Data retrieved successfully');
 
     // Send the data as a JSON response
-    res.json(data);
+    res.json(disputes);
   } catch (error) {
     // Handle errors and log them
     console.error('Error retrieving data from MongoDB:', error);
 
     // Send an error response
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error.Error retrieving data from MongoDB' });
   }
 });
 
