@@ -3,7 +3,8 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const cors = require('cors');
-const disputelistRoute = require('./routes/disputelist');
+//const disputelistRoute = require('./routes/disputelist');
+const createdisputeRoute = require('./routes/createdispute');
 
 // Import the connectDB function
 const connectDB = require('./connectdb');
@@ -37,7 +38,8 @@ app.use(express.json());
 
 // Import disputelist Routes
 
-app.use('/api/disputes', disputelistRoute);
+//app.use('/api/disputes', disputelistRoute);
+app.use('/api/disputes', createdisputeRoute);
 
 
 // Start the server
