@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "chrome",
+            "name": "https://credrp-backend.onrender.com",
+            "request": "launch",
+            "url": "https://credrp-backend.onrender.com"
+        }
+    ]
+}
