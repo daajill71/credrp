@@ -28,6 +28,9 @@ app.use(bodyParser.json());
 // Enable CORS with options
 app.use(cors(corsOptions));
 
+//Express
+app.use(express.json());
+
 // Routes
 //const disputeRoutes = require('./routes/disputeRoutes');
 //app.use('/api/disputes', disputeRoutes);
