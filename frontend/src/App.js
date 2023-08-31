@@ -1,9 +1,9 @@
 import React from 'react';
-//import CreateDispute from './components/CreateDispute';
+import CreateDispute from './components/CreateDispute';
 //import { BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom'; 
 //import Dashboard from './components/Dashboard';
 //import DisputeForm from './components/DisputeForm';
-import DisputeList from './components/DisputeList';
+//import DisputeList from './components/DisputeList';
 //import Registration from './components/Registration';
 //import LoginForm from './components/LoginForm';
 //import PasswordResetForm from './components/PasswordResetForm';
@@ -22,6 +22,7 @@ import DisputeList from './components/DisputeList';
 
 //Registration
 //LoginForm
+//DisputeList
 //Route path="/registration" element={<Registration />} />
               //Route path="/profile" element={<Profile />} />
 function App() {
@@ -31,7 +32,7 @@ function App() {
         <h1>Credit Repair Software</h1>
       </header>
       <main>
-        <DisputeList/>
+        <CreateDispute/>
              
         
 

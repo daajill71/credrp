@@ -8,7 +8,7 @@ function CreateDispute() {
     event.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/api/disputes', {
+      const response = await fetch('https://credrp-backend.onrender.com/api/disputes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
