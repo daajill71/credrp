@@ -1,5 +1,5 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+//const bodyParser = require('body-parser');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const cors = require('cors');
@@ -23,7 +23,7 @@ const corsOptions = {
 };
 
 // Middleware
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
 
 // Enable CORS with options
 app.use(cors(corsOptions));
