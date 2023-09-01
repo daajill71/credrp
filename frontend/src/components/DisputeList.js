@@ -37,14 +37,21 @@ function DisputeList() {
           <pre>{error.message}</pre>
         </div>
       ) : (
-        <ul>
-          {disputes.map((dispute) => (
-            <li key={dispute._id}>
-              <strong>Client Name:</strong> {dispute.clientName}<br />
-              <strong>Description:</strong> {dispute.description}
-            </li>
-          ))}
-        </ul>
+        <div>
+          <ul>
+            {disputes.map((dispute) => (
+              <li key={dispute._id}>
+                <strong>Client Name:</strong> {dispute.clientName}<br />
+                <strong>Description:</strong> {dispute.description}
+              </li>
+            ))}
+          </ul>
+          {/* Add this code to display the fetched data */}
+          <div>
+            <h3>Fetched Data:</h3>
+            <pre>{JSON.stringify(disputes, null, 2)}</pre>
+          </div>
+        </div>
       )}
     </div>
   );
