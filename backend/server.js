@@ -12,8 +12,6 @@ const connectDB = require('./connectdb');
 // Import the seedDB function (for seeding sample data)
 const seedDB = require('./seeddb');
 
-// Call connectDB to establish the MongoDB connection
-connectDB();
 
 // Define CORS options (if needed)
 const corsOptions = {
@@ -23,11 +21,18 @@ const corsOptions = {
   optionsSuccessStatus: 204, // Set the status for preflight requests to 204
 };
 
+// Enable CORS with options
+app.use(cors(corsOptions));
+
+// Call connectDB to establish the MongoDB connection
+connectDB();
+
+
+
 // Middleware
 //app.use(bodyParser.json());
 
-// Enable CORS with options
-app.use(cors(corsOptions));
+
 
 //Express
 app.use(express.json());
