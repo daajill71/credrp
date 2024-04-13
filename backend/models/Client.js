@@ -1,9 +1,14 @@
 const mongoose = require('mongoose');
 
 const clientSchema = new mongoose.Schema({
+  // Remove the clientId field
+  // Other fields...
   firstName: {
     type: String,
     required: true,
+  },
+  middleName: {
+    type: String,
   },
   lastName: {
     type: String,
@@ -17,40 +22,29 @@ const clientSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   phoneNumber: {
     type: String,
     required: true,
   },
-  driverLicenseCopy: {
-    type: String, // You can store the file path or URL to the uploaded file
+  socialSecurityNumber: {
+    type: String,
+    required: true,
   },
-  currentMailingAddressCopy: {
-    type: String, // File path or URL
-  },
-  socialSecurityCardCopy: {
-    type: String, // File path or URL
-  },
-  contracts: [
-    {
-      contractName: {
-        type: String,
-        required: true,
-      },
-      // Add more contract-related fields here
-    },
-  ],
   accountStatus: {
     type: String,
     enum: ['Active', 'Inactive', 'Suspended'],
     default: 'Active',
   },
-  // Add more fields as needed
 }, { timestamps: true });
+
+// Remove the toJSON option to keep the default _id field
+// clientSchema.set('toJSON', {
+//   virtuals: true,
+//   transform: (doc, ret) => {
+//     delete ret._id;
+//     delete ret.__v;
+//   },
+// });
 
 const Client = mongoose.model('Client', clientSchema);
 
