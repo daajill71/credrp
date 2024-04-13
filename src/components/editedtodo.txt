@@ -1,0 +1,67 @@
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const connectDB = require('./connectdb');
+//const errorHandler = require('./middleware/errorHandler'); // Import an error handling middleware
+
+dotenv.config();
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+
+
+// Express JSON parsing middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Fix the syntax here
+// Enable CORS
+app.use(cors());
+
+// Call connectDB to establish the MongoDB connection
+connectDB();
+
+// Import your routes
+//const disputeRoutes = require('./routes/disputeroutes'); // Import the route file
+//app.use('/api/disputes', disputeRoutes); // Use the route in your application
+
+//const disputelistRoute = require('./routes/disputelist');
+//app.use('/api/disputes', disputelistRoute);
+// Handle undefined routes
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not Found' });
+});
+
+// Error handling middleware (custom or you can use a package like express-async-errors)
+//app.use(errorHandler); // Use a custom error handling middleware
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+
+Disputeform.js see below:
+
+import React, { useState } from 'react';
+import axios from 'axios';
+
+export default DisputeForm
+
+  const [clientName, setClientName] = useState('');
+  const [description, setDescription] = useState('');
+
+  handleSubmission = async (error) => {
+    error.preventDefault()// avoid any errors
+    // Prepare the data to be sent to the backend
+
+    try {
+      await axios.post('http://localhost:5000/api/disputes'), {
+          clientName,
+          description,
+        };
+    catch(error) {
+          // Handle network errors (e.g., no internet connection, server unreachable, etc.).
+          console.error('Network error:', error);
+          console.log('Submitting dispute:', { clientName, description });
+        }
+
+   
