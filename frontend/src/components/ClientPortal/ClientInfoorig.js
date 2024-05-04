@@ -3,83 +3,61 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function ClientInfoForm() {
-  // Step 1: Initialize state variables
-  const [firstName, setFirstName] = useState('');
-  const [middleName, setMiddleName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [currentMailingAddress, setCurrentMailingAddress] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [socialSecurityNumber, setSocialSecurityNumber] = useState('');
+  // Initialize state variables
+  const [formData, setFormData] = useState({
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    currentMailingAddress: '',
+    dateOfBirth: '',
+    phoneNumber: '',
+    socialSecurityNumber: '',
+    _id: null // Placeholder for _id, will be updated later
+  });
+
   const [submissionMessage, setSubmissionMessage] = useState('');
 
-  // Step 2: Initialize navigate function from react-router-dom
+  // Initialize navigate function from react-router-dom
   const navigate = useNavigate();
 
-  // Step 3: Define the `handleSubmission` function
+  // Define the `handleSubmission` function
   const handleSubmission = async (e) => {
     e.preventDefault();
 
-    // Step 3a: Log client information to console
-    console.log('Submitting client information:', {
-      firstName,
-      middleName,
-      lastName,
-      currentMailingAddress,
-      dateOfBirth,
-      phoneNumber,
-      socialSecurityNumber,
-      _id: null // Placeholder for _id, will be updated later
-    });
+    // Log client information to console
+    console.log('Submitting client information:', formData);
 
-    // Step 3b: Create form data object
-    const formData = {
-      firstName,
-      middleName,
-      lastName,
-      currentMailingAddress,
-      dateOfBirth,
-      phoneNumber,
-      socialSecurityNumber,
-    };
-
-    // Step 3c: Define API URL
+    // Define API URL
     const apiUrl = 'http://localhost:5000/add-client';
 
     try {
-      // Step 3d: Send POST request to server
+      // Send POST request to server
       const response = await axios.post(apiUrl, formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-      // Step 3e: Handle server response
+      // Handle server response
       if (response.status >= 200 && response.status < 300) {
-        // Step 3f: Update submission message
+        // Update submission message
         setSubmissionMessage('Client information submitted successfully');
 
-        // Step 3g: Update _id in the console log
-        console.log('Submitting client information:', {
-          ...formData,
-          _id: response.data._id
-        });
-
-        // Step 3h: Navigate to `client-upload` page with client ID
-        navigate(`/client-portal/client-upload/${response.data._id}`);
+        // Navigate to `client-upload` page with client ID
+        navigate(`/client-portal/client-upload/${response.data.client._id}`);
       } else {
-        // Step 3i: Handle HTTP error
+        // Handle HTTP error
         console.error('HTTP error:', response.status);
         setSubmissionMessage('Error submitting client information. Please try again');
       }
     } catch (error) {
-      // Step 3j: Handle network error
+      // Handle network error
       console.error('Network error:', error);
       setSubmissionMessage('Error submitting client information. Please try again');
     }
   };
 
-  // Step 4: Return JSX for the component
+  // Return JSX for the component
   return (
     <div>
       <h2>Client Information Form</h2>
@@ -90,8 +68,8 @@ function ClientInfoForm() {
           <input
             type="text"
             id="firstName"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            value={formData.firstName}
+            onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
             required
           />
         </div>
@@ -100,8 +78,8 @@ function ClientInfoForm() {
           <input
             type="text"
             id="middleName"
-            value={middleName}
-            onChange={(e) => setMiddleName(e.target.value)}
+            value={formData.middleName}
+            onChange={(e) => setFormData({ ...formData, middleName: e.target.value })}
           />
         </div>
         <div>
@@ -109,8 +87,8 @@ function ClientInfoForm() {
           <input
             type="text"
             id="lastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+            value={formData.lastName}
+            onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
             required
           />
         </div>
@@ -119,8 +97,8 @@ function ClientInfoForm() {
           <input
             type="text"
             id="currentMailingAddress"
-            value={currentMailingAddress}
-            onChange={(e) => setCurrentMailingAddress(e.target.value)}
+            value={formData.currentMailingAddress}
+            onChange={(e) => setFormData({ ...formData, currentMailingAddress: e.target.value })}
             required
           />
         </div>
@@ -129,8 +107,8 @@ function ClientInfoForm() {
           <input
             type="date"
             id="dateOfBirth"
-            value={dateOfBirth}
-            onChange={(e) => setDateOfBirth(e.target.value)}
+            value={formData.dateOfBirth}
+            onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
             required
           />
         </div>
@@ -139,8 +117,8 @@ function ClientInfoForm() {
           <input
             type="tel"
             id="phoneNumber"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            value={formData.phoneNumber}
+            onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
             required
           />
         </div>
@@ -149,8 +127,8 @@ function ClientInfoForm() {
           <input
             type="text"
             id="socialSecurityNumber"
-            value={socialSecurityNumber}
-            onChange={(e) => setSocialSecurityNumber(e.target.value)}
+            value={formData.socialSecurityNumber}
+            onChange={(e) => setFormData({ ...formData, socialSecurityNumber: e.target.value })}
             required
           />
         </div>
@@ -163,5 +141,5 @@ function ClientInfoForm() {
   );
 }
 
-// Step 5: Export the component
+// Export the component
 export default ClientInfoForm;

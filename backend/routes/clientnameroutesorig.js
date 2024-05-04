@@ -1,30 +1,40 @@
 const express = require('express');
 const router = express.Router();
-const Client = require('../models/Client'); // Assuming you have a Client model
+const Client = require('../models/Client');
 
-// Route to fetch client name based on client ID
-router.get('/:id/name', async (req, res) => {
+// Route to fetch client first name based on client ID
+router.get('/:id/firstName', async (req, res) => {
   try {
     const { id } = req.params;
-    // Log before retrieving client name by id
-    console.log('Fetching client name by ID ...');
-
+    console.log('Fetching client first name by ID ...');
     const client = await Client.findById(id);
     if (!client) {
-      // Log client not found
       console.log('Client not found');
       return res.status(404).json({ error: 'Client not found' });
     }
-    const { firstName, lastName } = client;
-
-    // Log client before sending them as a response
-    console.log('Client name retrieved successfully:', client);
-
-    // Send client name as a JSON response
-    res.json({ firstName, lastName });
+    console.log('Client first name retrieved successfully:', client.firstName);
+    res.json({ firstName: client.firstName });
   } catch (error) {
-    console.error('Error fetching client name:', error);
-    res.status(500).json({ error: 'An error occurred while fetching client name' });
+    console.error('Error fetching client first name:', error);
+    res.status(500).json({ error: 'An error occurred while fetching client first name' });
+  }
+});
+
+// Route to fetch client last name based on client ID
+router.get('/:id/lastName', async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log('Fetching client last name by ID ...');
+    const client = await Client.findById(id);
+    if (!client) {
+      console.log('Client not found');
+      return res.status(404).json({ error: 'Client not found' });
+    }
+    console.log('Client last name retrieved successfully:', client.lastName);
+    res.json({ lastName: client.lastName });
+  } catch (error) {
+    console.error('Error fetching client last name:', error);
+    res.status(500).json({ error: 'An error occurred while fetching client last name' });
   }
 });
 

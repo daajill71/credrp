@@ -5,6 +5,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 // Import the components for each route from the Adminportal directory
 import ClientListForm from '../components/AdminPortal/ClientListForm';
 import DisputeForm from '../components/AdminPortal/DisputeForm';
+import CreditReportForm from '../components/AdminPortal/CreditReportForm';
 import DisputeListForm from '../components/AdminPortal/DisputeList';
 
 // Define the functional component AdminPortal
@@ -17,9 +18,10 @@ const AdminPortal = () => {
         <Route path="/client-list" element={<ClientListForm />} />
 
         {/* Route for the Dispute Form */}
-        <Route path="/dispute/:id" element={<DisputeForm />} />
+        <Route path="/dispute/:_id" element={<DisputeForm />} />
 
-        
+        {/* Route for the Credit Report Form */}
+        <Route path="/analysis/:_id" element={<CreditReportForm />} />
 
         {/* Route for the Dispute List Form */}
         <Route path="/dispute-list" element={<DisputeListForm />} />

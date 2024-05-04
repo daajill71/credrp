@@ -66,6 +66,10 @@ app.use('/docup', docupListRoutes);
 const clientNameRoutes = require('./routes/clientnameroutes');
 app.use('/client', clientNameRoutes);
 
+// Import and use the analyze credit report routes for analyzing credit reports using _id
+const analyzecreditreportRoutes = require('./routes/analyzecreditreportRoutes');
+app.use('/analyze-credit-report', analyzecreditreportRoutes);
+
 // Handle undefined routes
 app.use((req, res) => {
   res.status(404).json({ error: 'Not Found' });
@@ -75,3 +79,4 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+

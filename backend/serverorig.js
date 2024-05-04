@@ -30,8 +30,21 @@ const clientRoutes = require('./routes/clientroutes');
 app.use('/add-client', clientRoutes);
 
 // Import and use the client list routes for GET requests
-const clientListRoutes = require('./routes/clientlist');
-app.use('/get-client', clientListRoutes);
+const singleClientRoutes = require('./routes/singleClientRoutes');
+app.use('/get-client', singleClientRoutes);
+
+// Import and use the client edit routes to edit client details
+const clientEditRoutes = require('./routes/clienteditroutes');
+app.use('/edit-client', clientEditRoutes);
+
+// Import and use the client delete routes to delete client details
+const clientDeleteRoutes = require('./routes/clientdeleteroutes');
+app.use('/delete-client', clientDeleteRoutes);
+
+
+// Import and use the all client routes for GET requests
+const allClientsRoutes = require('./routes/allClientsRoutes');
+app.use('/clients', allClientsRoutes);
 
 // Import and use the document upload routes for file uploads
 const documentRoutes = require('./routes/documentroutes');
@@ -40,6 +53,22 @@ app.use('/documents', documentRoutes);
 // Import and use the document list routes for retrieving documents
 const documentListRoutes = require('./routes/documentlist');
 app.use('/documents', documentListRoutes);
+
+// Import and use the document upload routes for file uploads
+const docupRoutes = require('./routes/docuproutes');
+app.use('/docup', docupRoutes);
+
+// Import and use the docup list routes for retrieving only uploaded docups
+const docupListRoutes = require('./routes/docuplistroutes');
+app.use('/docup', docupListRoutes);
+
+// Import and use the clientname routes for retrieving client name using client ID
+const clientNameRoutes = require('./routes/clientnameroutes');
+app.use('/client', clientNameRoutes);
+
+// Import and use the analyze credit report routes for analyzing credit reports using _id
+const analyzecreditreportRoutes = require('./routes/analyzecreditreportRoutes');
+app.use('/analyze-credit-report', analyzecreditreportRoutes);
 
 // Handle undefined routes
 app.use((req, res) => {
@@ -50,3 +79,4 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+

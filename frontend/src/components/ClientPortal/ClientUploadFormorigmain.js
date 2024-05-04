@@ -1,11 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
 
-const ClientUploadForm = () => {
-  // Step 1: Get the '_id' parameter from the URL using useParams
-  const { _id } = useParams(); // Use '_id' instead of 'id'
-  console.log('ID from URL:', _id);
+
+const ClientUploadForm = ({ formData }) => {
+  // Step 1: Get the '_id' from formData
+  const { _id } = formData; // Access _id directly from formData
+  console.log('ID from ClientInfoForm:', _id); // Log the ID passed from ClientInfoForm
+
 
 
   // Step 2: Set up state for success message
@@ -201,8 +202,8 @@ const ClientUploadForm = () => {
         <button type="submit">Submit</button>
         {/* Step 23: Display success message */}
         {successMessage && <p>{successMessage}</p>}
-        {/* Step 24: Display URL Parameter '_id' if present */}
-        {_id && <p>URL Parameter 'id': {_id}</p>}
+        {/* Step 24: Display '_id' if present */}
+        {_id && <p>'id': {_id}</p>}
       </form>
     </div>
   );

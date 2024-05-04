@@ -3,9 +3,10 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 const ClientUploadForm = () => {
-  // Step 1: Get the 'id' parameter from the URL
-  const { id } = useParams();
-  console.log('ID from URL:', id);
+  // Step 1: Get the '_id' parameter from the URL using useParams
+  const { _id } = useParams(); // Use '_id' instead of 'id'
+  console.log('ID from URL:', _id);
+
 
   // Step 2: Set up state for success message
   const [successMessage, setSuccessMessage] = useState(null);
@@ -13,7 +14,7 @@ const ClientUploadForm = () => {
   // Step 3: Create refs for file input elements
   const fileInputRefs = {
     driverLicense: useRef(null),
-    mailingAddressProof: useRef(null),
+    proofOfMailingAddress: useRef(null),
     socialSecurityCard: useRef(null),
     otherDocument: useRef(null),
   };
@@ -24,7 +25,7 @@ const ClientUploadForm = () => {
   // Step 5: Set up state to track selected files
   const [fileUploads, setFileUploads] = useState({
     driverLicense: null,
-    mailingAddressProof: null,
+    proofOfMailingAddress: null,
     socialSecurityCard: null,
     otherDocument: null,
   });
@@ -53,8 +54,8 @@ const ClientUploadForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Step 10: Display an error message if 'id' is missing
-    if (!id) {
+    // Step 10: Display an error message if '_id' is missing
+    if (!_id) {
       alert('Client ID is missing.');
       return;
     }
@@ -62,6 +63,8 @@ const ClientUploadForm = () => {
     try {
       // Step 11: Create FormData to append selected files
       const documentData = new FormData();
+
+      documentData.append('clientId', _id); // Append _id first
 
       for (const fieldName in fileUploads) {
         const file = fileUploads[fieldName];
@@ -72,42 +75,36 @@ const ClientUploadForm = () => {
 
       // Step 12: Log the request data before sending
       console.log('Request Data:', {
-        clientId: id,
+        clientId: _id,
         documentData: documentData,
       });
 
-      // Step 13: Pass the client's ID to the server
-      documentData.append('clientId', id);
-
-      // Step 14: Log the client ID being passed to the server
-      console.log('Client ID sent to the server:', id);
-
-      // Step 15: Send a POST request to the server with the documentData
+      // Step 13: Send a POST request to the server with the documentData
       const documentResponse = await axios.post('http://localhost:5000/documents/upload', documentData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
-      // Step 16: Handle the server response
+      // Step 14: Handle the server response
       if (documentResponse.status === 201) {
         setSuccessMessage('Documents submitted successfully');
         setTimeout(() => setSuccessMessage(null), 5000);
 
-        // Step 17: Log documents sent to the backend
+        // Step 15: Log documents sent to the backend
         console.log('Documents sent to the backend:', documentResponse.data);
       } else {
         console.error('Error uploading documents:', documentResponse.status);
         alert('Error uploading documents. Please try again.');
       }
     } catch (error) {
-      // Step 18: Handle network errors
+      // Step 16: Handle network errors
       console.error('Network error:', error);
       alert('Error. Please try again.');
     }
   };
 
-  // Step 19: Set up an effect to clear the success message after 5 seconds
+  // Step 17: Set up an effect to clear the success message after 5 seconds
   useEffect(() => {
     if (successMessage) {
       const timer = setTimeout(() => {
@@ -117,7 +114,7 @@ const ClientUploadForm = () => {
     }
   }, [successMessage]);
 
-  // Step 20: Render the file upload form using JSX
+  // Step 18: Render the file upload form using JSX
   return (
     <div>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -126,7 +123,7 @@ const ClientUploadForm = () => {
 
           <div>
             <label>Driver's License:</label>
-            {/* Step 21: Set up file input for Driver's License */}
+            {/* Step 19: Set up file input for Driver's License */}
             <input
               type="file"
               name="driverLicense"
@@ -134,7 +131,7 @@ const ClientUploadForm = () => {
               onChange={(e) => handleFileChange('driverLicense', e)}
               required
             />
-            {/* Step 22: Display delete button if a file is selected */}
+            {/* Step 20: Display delete button if a file is selected */}
             {fileUploads.driverLicense && (
               <div>
                 <button type="button" onClick={() => handleFileDelete('driverLicense')}>
@@ -144,19 +141,19 @@ const ClientUploadForm = () => {
             )}
           </div>
 
-          {/* Step 23: Repeat the code for other file inputs */}
+          {/* Step 21: Repeat the code for other file inputs */}
           <div>
             <label>Proof of Mailing Address:</label>
             <input
               type="file"
-              name="mailingAddressProof"
-              ref={fileInputRefs.mailingAddressProof}
-              onChange={(e) => handleFileChange('mailingAddressProof', e)}
+              name="proofOfMailingAddress"
+              ref={fileInputRefs.proofOfMailingAddress}
+              onChange={(e) => handleFileChange('proofOfMailingAddress', e)}
               required
             />
-            {fileUploads.mailingAddressProof && (
+            {fileUploads.proofOfMailingAddress && (
               <div>
-                <button type="button" onClick={() => handleFileDelete('mailingAddressProof')}>
+                <button type="button" onClick={() => handleFileDelete('proofOfMailingAddress')}>
                   Delete
                 </button>
               </div>
@@ -200,12 +197,12 @@ const ClientUploadForm = () => {
           </div>
         </div>
 
-        {/* Step 24: Submit button */}
+        {/* Step 22: Submit button */}
         <button type="submit">Submit</button>
-        {/* Step 25: Display success message */}
+        {/* Step 23: Display success message */}
         {successMessage && <p>{successMessage}</p>}
-        {/* Step 26: Display URL Parameter 'id' if present */}
-        {id && <p>URL Parameter 'id': {id}</p>}
+        {/* Step 24: Display URL Parameter '_id' if present */}
+        {_id && <p>URL Parameter 'id': {_id}</p>}
       </form>
     </div>
   );

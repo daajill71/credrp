@@ -37,7 +37,7 @@ const ClientListForm = () => {
  // };
 
   const handleDisputeClick = (_id) => {
-    navigate(`/admin-portal/dispute/${_id}`);
+    navigate(`/admin-portal/analysis/${_id}`);
   };
 
   const handleDisplayDetails = (client) => {

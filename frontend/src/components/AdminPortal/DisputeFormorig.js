@@ -3,122 +3,101 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 function DisputeForm() {
-  // Get the client ID from the URL params
-  const { id } = useParams();
-  // State variables to store first name, last name, description, and submission message
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  // Extracting _id from URL params
+  const { _id } = useParams();
+  console.log('ID from URL:', _id);
+
+  // State variables for client data, description, and submission message
+  const [clientData, setClientData] = useState({ firstName: '', lastName: '' });
   const [description, setDescription] = useState('');
   const [submissionMessage, setSubmissionMessage] = useState('');
 
-  // useEffect hook to fetch client name based on client ID
+  // Fetch client first and last names on component mount
   useEffect(() => {
-    // Define an async function to fetch client name
     const fetchClientName = async () => {
       try {
-        // Log that we are fetching the client name for the given ID
-        console.log('Fetching client name by ID:', id);
-        // Send a GET request to fetch the first name
-        const firstNameResponse = await axios.get(`http://localhost:5000/api/clients/${id}/firstName`);
-        // Log the response data containing the first name
-        console.log('First name response:', firstNameResponse.data);
-        // Update the first name state with the fetched data
-        setFirstName(firstNameResponse.data.firstName);
+        // Fetching first and last names concurrently using Promise.all
+        const [firstNameResponse, lastNameResponse] = await Promise.all([
+          axios.get(`http://localhost:5000/api/client/${_id}/firstName`),
+          axios.get(`http://localhost:5000/api/client/${_id}/lastName`)
+        ]);
 
-        // Send a GET request to fetch the last name
-        const lastNameResponse = await axios.get(`http://localhost:5000/api/clients/${id}/lastName`);
-        // Log the response data containing the last name
-        console.log('Last name response:', lastNameResponse.data);
-        // Update the last name state with the fetched data
-        setLastName(lastNameResponse.data.lastName);
+        // Set client data with fetched first and last names
+        setClientData({
+          firstName: firstNameResponse.data.firstName,
+          lastName: lastNameResponse.data.lastName
+        });
 
-        // Log that client name has been successfully fetched
-        console.log('Client name fetched successfully.');
+        // Set document title if both first and last names are available
+        if (firstNameResponse.data.firstName && lastNameResponse.data.lastName) {
+          document.title = `${firstNameResponse.data.firstName} ${lastNameResponse.data.lastName} Disputes`;
+        }
       } catch (error) {
-        // Log any errors that occur during the fetch process
         console.error('Error fetching client name:', error);
-        // Log that there was an error fetching the client name
-        console.log('Error fetching first and last name.');
       }
     };
 
-    // Call the fetchClientName function when the component mounts or when the client ID changes
     fetchClientName();
-  }, [id]); // Dependency array with 'id' ensures that the effect runs when 'id' changes
+  }, [_id]); // Dependency array to re-fetch data when _id changes
 
-  // useEffect hook to update the document title with the fetched first and last names
-  useEffect(() => {
-    // Log that we are updating the document title
-    console.log('Updating document title:', `${firstName} ${lastName} Disputes`);
-    // Update the document title with the fetched first and last names
-    document.title = `${firstName} ${lastName} Disputes`;
-  }, [firstName, lastName]); // Dependency array with 'firstName' and 'lastName' ensures that the effect runs when either of them changes
-
-  // Function to handle form submission
+  // Handle form submission
   const handleSubmission = async (e) => {
     e.preventDefault();
-    // Prepare form data to be submitted
     const formData = {
-      id,
+      _id,
       description,
     };
 
-    const apiUrl = `http://localhost:5000/api/disputes/${id}`;
+    const apiUrl = `http://localhost:5000/api/disputes/${_id}`;
 
     try {
-      // Send a POST request to submit the form data
+      // Make POST request to submit dispute
       const response = await axios.post(apiUrl, formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-      // Check if the submission was successful
+      // Handle successful submission
       if (response.status >= 200 && response.status < 300) {
-        // If successful, set a submission message indicating success
         setSubmissionMessage('Dispute submitted successfully');
-        // Clear the description field
         setDescription('');
-        // Hide the submission message after 5 seconds
+        // Clear submission message after 5 seconds
         setTimeout(() => {
           setSubmissionMessage('');
         }, 5000);
       } else {
-        // If there was an HTTP error, log the status code
+        // Handle HTTP error
         console.error('HTTP error:', response.status);
-        // Set a submission message indicating an error
         setSubmissionMessage('Error submitting dispute. Please try again');
-        // Hide the submission message after 5 seconds
+        // Clear submission message after 5 seconds
         setTimeout(() => {
           setSubmissionMessage('');
         }, 5000);
       }
     } catch (error) {
-      // If there was a network error, log the error
+      // Handle network error
       console.error('Network error:', error);
-      // Set a submission message indicating an error
       setSubmissionMessage('Error submitting dispute. Please try again');
-      // Hide the submission message after 5 seconds
+      // Clear submission message after 5 seconds
       setTimeout(() => {
         setSubmissionMessage('');
       }, 5000);
     }
   };
 
+  // Render form and submission message
   return (
     <div>
-      {/* Display the client name as the heading */}
-      <h2>{`${firstName} ${lastName} Disputes`}</h2>
-      {/* Form to submit a dispute */}
+      <h2>{clientData.firstName && clientData.lastName ? `${clientData.firstName} ${clientData.lastName} Disputes` : 'Loading...'}</h2>
+     
       <form onSubmit={(e) => handleSubmission(e)}>
         <div>
-          <label htmlFor="clientId">Client ID</label>
-          {/* Display the client ID (read-only) */}
-          <input type="text" id="clientId" value={id} readOnly />
+          <label htmlFor="_id">Client ID</label>
+          <input type="text" id="_id" value={_id} readOnly />
         </div>
         <div>
           <label htmlFor="description">Description</label>
-          {/* Textarea to enter the dispute description */}
           <textarea
             id="description"
             value={description}
@@ -126,10 +105,8 @@ function DisputeForm() {
             required
           />
         </div>
-        {/* Button to submit the dispute */}
         <button type="submit">Submit</button>
       </form>
-      {/* Display the submission message if it exists */}
       {submissionMessage && <p>{submissionMessage}</p>}
     </div>
   );
