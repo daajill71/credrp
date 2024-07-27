@@ -31,16 +31,9 @@ function analyzePDFText(text) {
     inquiries: []
   };
 
-  // Log the parsed text to the console
-  console.log('Parsed Text:', text);
-
   // Extract accounts and inquiries sections from the text
   const accountsSection = text.split('Inquiries')[0].split('Accounts:')[1]?.trim();
   const inquiriesSection = text.split('Inquiries')[1]?.trim();
-
-  // Log the sections to verify their content
-  console.log('Accounts Section:', accountsSection);
-  console.log('Inquiries Section:', inquiriesSection);
 
   // Process accounts section if it exists
   if (accountsSection) {
@@ -53,9 +46,6 @@ function analyzePDFText(text) {
   if (inquiriesSection) {
     console.log('Inquiries Section:', inquiriesSection);
     const inquiryLines = inquiriesSection.split('\n').filter(line => line.trim() !== '');
-
-    // Log the inquiry lines
-    console.log('Inquiry Lines:', inquiryLines);
 
     // Remove the header line
     if (inquiryLines.length > 0) {
@@ -103,74 +93,18 @@ function analyzePDFText(text) {
 
   // Function to process each line of inquiry information
   function processInquiryBlock(lines) {
-    const datePatterns = [/\b\d{4}-\d{2}-\d{2}\b/, /\b\d{2}\/\d{2}\/\d{4}\b/]; // Regex patterns to match both date formats
-  
     lines.forEach((line, index) => {
       console.log(`Original inquiry line ${index + 1}:`, line);
-  
-      // Extract dates before normalization for logging
-      let extractedDatesBefore = [];
-      datePatterns.forEach(pattern => {
-        const matches = line.match(pattern);
-        if (matches) {
-          extractedDatesBefore.push(...matches);
-        }
-      });
-      console.log(`Dates found before normalization in line ${index + 1}:`, extractedDatesBefore.join(', ') || 'None');
-  
-      // Remove spaces around hyphens and slashes in dates, and ensure dates are kept together
-      let cleanedLine = line
-        .replace(/(\d)\s*-\s*(\d)/g, '$1-$2') // Remove spaces around hyphens
-        .replace(/(\d)\s*\/\s*(\d)/g, '$1/$2'); // Remove spaces around slashes
-  
-      // Normalize by adding spaces around dates and between words
-      let normalizedLine = cleanedLine
-        .replace(/(\d{4}\/\d{2}\/\d{2})/g, ' $1 ') // Ensure dates are kept together
-        .replace(/(\d{2}\/\d{2}\/\d{4})/g, ' $1 ') // Ensure dates are kept together for different date format
-        .replace(/([A-Z](?=[a-z]))/g, ' $1') // Add space before each capital letter followed by a lowercase letter
-        .replace(/\t+/g, ' ') // Replace tabs with a single space
-        .replace(/\s{2,}/g, ' ') // Replace multiple spaces with a single space
-        .trim();
-  
-      // Ensure dates are correctly identified and spaced
-      normalizedLine = normalizedLine
-        .replace(/(\d{2}\/\d{2}\/\d{4})/g, ' $1 ') // Add space before dates if not already present
-        .replace(/(\d{4}-\d{2}-\d{2})/g, ' $1 ') // Add space before dates if not already present
-        .replace(/\s{2,}/g, ' ') // Ensure only single space between words
-  
-      // Extract dates after normalization for logging
-      let extractedDatesAfter = [];
-      datePatterns.forEach(pattern => {
-        const matches = normalizedLine.match(pattern);
-        if (matches) {
-          extractedDatesAfter.push(...matches);
-        }
-      });
-      console.log(`Dates found after normalization in line ${index + 1}:`, extractedDatesAfter.join(', ') || 'None');
-  
-      // Log the normalized line
-      console.log(`Normalized inquiry line ${index + 1}:`, normalizedLine);
-  
-      // Split the line based on spaces
-      const parts = normalizedLine.split(' ').map(part => part.trim()).filter(part => part);
-      console.log(`Split parts of line ${index + 1}:`, parts);
-  
-      // Check if the date is correctly identified in parts
-      let dateFound = false;
-      parts.forEach(part => {
-        datePatterns.forEach(pattern => {
-          if (pattern.test(part)) {
-            console.log(`Identified date in inquiry line ${index + 1}:`, part);
-            dateFound = true;
-          }
-        });
-      });
-  
-      // Log if no date was found
-      if (!dateFound) {
-        console.log(`No date found in inquiry line ${index + 1}.`);
-      }
-  
+
+      // Replace tabs and multiple spaces with a single comma for consistent splitting
+      const commaSeparatedLine = line.replace(/\t+/g, ',').replace(/\s{2,}/g, ',');
+      console.log(`Converted inquiry line ${index + 1}:`, commaSeparatedLine);
+
+      // Split the line based on commas
+      const parts = commaSeparatedLine.split(',').map(part => part.trim()).filter(part => part);
+      console.log(`Processing line ${index + 1}:`, commaSeparatedLine);
+      console.log('Split parts:', parts);
+
       // If the line contains exactly 4 parts, create an inquiry object
       if (parts.length === 4) {
         const inquiry = {
@@ -179,17 +113,14 @@ function analyzePDFText(text) {
           'Date On Inquiry': parts[2],
           'Credit Bureau': parts[3]
         };
-  
+
         categories.inquiries.push(inquiry);
       } else {
-        // Log lines that do not match the expected format
         console.log('Line does not have enough parts to create an inquiry:', parts);
-        console.log('Original line:', normalizedLine);
+        console.log('Original line:', commaSeparatedLine);
       }
     });
   }
-  
-  
 
   // Function to categorize an account based on keywords
   function categorizeAccount(account) {
@@ -223,6 +154,9 @@ router.post('/:_id', upload.single('creditReport'), async (req, res) => {
     // Parse the PDF file
     const pdfData = await pdfParse(fileBuffer);
     const text = pdfData.text;
+
+    // Log the parsed text to the console
+    console.log('Parsed Text:', text);
 
     // Analyze the parsed text to identify negative and derogatory accounts
     const categorizedAccounts = analyzePDFText(text);

@@ -9,10 +9,18 @@ const creditReportSchema = new mongoose.Schema({
   analysisResult: [{
     keyword: String,
     account: {
-      name: String,
+      name: String, // Assuming this is the account name
+      accountName: String,
       number: String,
       balance: String
-    }
+    },
+    // Add fields for inquiries
+    inquiries: [{
+      Creditor: String,
+      'Types of Business': String,
+      'Date of Inquiry': String,
+      'Credit Bureau': String
+    }]
   }]
 });
 

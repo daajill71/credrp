@@ -128,6 +128,8 @@ function analyzePDFText(text) {
         .replace(/(\d{4}\/\d{2}\/\d{2})/g, ' $1 ') // Ensure dates are kept together
         .replace(/(\d{2}\/\d{2}\/\d{4})/g, ' $1 ') // Ensure dates are kept together for different date format
         .replace(/([A-Z](?=[a-z]))/g, ' $1') // Add space before each capital letter followed by a lowercase letter
+        //.replace(/(\d)(?=\D)/g, '$1 ') // Add space after each digit followed by a non-digit character
+        //.replace(/(?<=\D)(\d)/g, ' $1') // Add space before each digit preceded by a non-digit character
         .replace(/\t+/g, ' ') // Replace tabs with a single space
         .replace(/\s{2,}/g, ' ') // Replace multiple spaces with a single space
         .trim();

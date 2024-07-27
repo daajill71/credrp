@@ -126,17 +126,12 @@ function analyzePDFText(text) {
       // Normalize by adding spaces around dates and between words
       let normalizedLine = cleanedLine
         .replace(/(\d{4}\/\d{2}\/\d{2})/g, ' $1 ') // Ensure dates are kept together
-        .replace(/(\d{2}\/\d{2}\/\d{4})/g, ' $1 ') // Ensure dates are kept together for different date format
         .replace(/([A-Z](?=[a-z]))/g, ' $1') // Add space before each capital letter followed by a lowercase letter
+        .replace(/(\d)(?=\D)/g, '$1 ') // Add space after each digit followed by a non-digit character
+        .replace(/(?<=\D)(\d)/g, ' $1') // Add space before each digit preceded by a non-digit character
         .replace(/\t+/g, ' ') // Replace tabs with a single space
         .replace(/\s{2,}/g, ' ') // Replace multiple spaces with a single space
         .trim();
-  
-      // Ensure dates are correctly identified and spaced
-      normalizedLine = normalizedLine
-        .replace(/(\d{2}\/\d{2}\/\d{4})/g, ' $1 ') // Add space before dates if not already present
-        .replace(/(\d{4}-\d{2}-\d{2})/g, ' $1 ') // Add space before dates if not already present
-        .replace(/\s{2,}/g, ' ') // Ensure only single space between words
   
       // Extract dates after normalization for logging
       let extractedDatesAfter = [];
@@ -188,6 +183,7 @@ function analyzePDFText(text) {
       }
     });
   }
+  
   
   
 
