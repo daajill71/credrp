@@ -45,19 +45,23 @@ const CreditReportForm = () => {
       <button onClick={handleUpload}>Analyze Credit Report</button>
       
       <h3>Analysis Result</h3>
-      <ul>
-        {analysisResult.map((item, index) => (
-          <li key={index}>
-            <strong>{item.keyword}</strong>: {item.accounts.map((account, idx) => (
-              <div key={idx}>
-                <div>Name: {account.name}</div>
-                <div>Number: {account.number}</div>
-                <div>Balance: {account.balance}</div>
-              </div>
-            ))}
-          </li>
-        ))}
-      </ul>
+      {analysisResult.length > 0 ? (
+        <ul>
+          {analysisResult.map((item, index) => (
+            <li key={index}>
+              <strong>{item.keyword}</strong>: {item.account && (
+                <div>
+                  <div>Name: {item.account.name}</div>
+                  <div>Number: {item.account.number}</div>
+                  <div>Balance: {item.account.balance}</div>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No analysis result available.</p>
+      )}
     </div>
   );
 };
