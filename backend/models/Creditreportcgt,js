@@ -1,0 +1,52 @@
+const mongoose = require('mongoose');
+
+// Define the schema for categorized accounts and inquiries
+const CategorizedAccountsSchema = new mongoose.Schema({
+  delinquent: [{
+    accountName: String,
+    // Add other fields related to the account details as needed
+  }],
+  latepayment: [{
+    accountName: String,
+    // Add other fields related to the account details as needed
+  }],
+  chargeOff: [{
+    accountName: String,
+    // Add other fields related to the account details as needed
+  }],
+  inquiries: [{
+    Creditor: String,
+    'Date of Inquiry': String,
+    'Business Type': String,
+    'Scheduled to Continue Until': String
+  }]
+}, { _id : false });
+
+// Define the schema for the CreditReport
+const CreditReportSchema = new mongoose.Schema({
+  client: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Client',
+    required: true
+  },
+  analysisResult: {
+    type: CategorizedAccountsSchema,
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+// Middleware to update the updatedAt field before each save
+CreditReportSchema.pre('save', function(next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
+module.exports = mongoose.model('CreditReport', CreditReportSchema);
